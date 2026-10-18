@@ -1,0 +1,913 @@
+[
+  {
+    "id": 1,
+    "brand": "Jean Paul Gaultier",
+    "name": "Le Male Le Parfum",
+    "family": "Warm & Spicy",
+    "notes": [
+      "Cardamom",
+      "Lavender",
+      "Iris",
+      "Vanilla"
+    ],
+    "desc": "A warm, aromatic fragrance built around cardamom, lavender, iris and vanilla.",
+    "m": [
+      85,
+      25,
+      65,
+      78
+    ],
+    "pop": 92,
+    "concentration": "Eau de Parfum Intense",
+    "identitySource": "https://www.jeanpaulgaultier.com/us/en_US/p/range-le-male/le-male-le-parfum-eau-de-parfum-intense-000000000065156529",
+    "photoReason": "No exact photograph with confirmed reuse permission found; available retailer photos have no established reuse permission.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 2,
+    "brand": "Jean Paul Gaultier",
+    "name": "Le Beau Le Parfum",
+    "family": "Sweet",
+    "notes": [
+      "Ginger",
+      "Pineapple",
+      "Iris",
+      "Coconut",
+      "Tonka",
+      "Sandalwood"
+    ],
+    "desc": "A tropical-feeling fragrance with creamy, sweet and woody facets.",
+    "m": [
+      88,
+      42,
+      58,
+      75
+    ],
+    "pop": 88,
+    "concentration": "Eau de Parfum Intense",
+    "identitySource": "https://www.jeanpaulgaultier.com/us/en_US/p/range-le-beau/le-beau-le-parfum-eau-de-parfum-intense-000000000065180318",
+    "source": "https://unsplash.com/photos/a-bottle-of-perfume-sitting-next-to-a-can-Vq511boXLUk",
+    "credit": "Filip Baotić · Unsplash License",
+    "licenseURL": "https://unsplash.com/license",
+    "changes": "Host resized; SVG frame crops the photograph around the bottle. No retouching.",
+    "photo_url": "/photos/2.svg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 3,
+    "brand": "Dior",
+    "name": "Sauvage Eau de Parfum",
+    "family": "Fresh",
+    "notes": [
+      "Bergamot",
+      "Sichuan Pepper",
+      "Lavender",
+      "Vanilla"
+    ],
+    "desc": "A fresh spicy style with citrus brightness and warm undertones.",
+    "m": [
+      45,
+      87,
+      53,
+      75
+    ],
+    "pop": 96,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.dior.com/en_us/beauty/products/sauvage-eau-de-parfum-C099700027.html",
+    "source": "https://unsplash.com/photos/a-bottle-of-dior-sauvage-eau-de-parfum-bgrM9NxKLRQ",
+    "credit": "Farhan Chohan · Unsplash License",
+    "licenseURL": "https://unsplash.com/license",
+    "changes": "Host-resized photograph; no retouching",
+    "photo_url": "/photos/3.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 4,
+    "brand": "Yves Saint Laurent",
+    "name": "Y Eau de Parfum",
+    "family": "Fresh",
+    "notes": [
+      "Apple",
+      "Ginger",
+      "Sage",
+      "Amberwood"
+    ],
+    "desc": "A crisp aromatic scent with fruity freshness and woody depth.",
+    "m": [
+      54,
+      89,
+      62,
+      77
+    ],
+    "pop": 90,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.yslbeautyus.com/fragrance/mens-fragrance/y/y-eau-de-parfum/727YSL.html",
+    "photoReason": "The free Y photo does not establish the Eau de Parfum concentration; excluded to avoid a different edition.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 5,
+    "brand": "Versace",
+    "name": "Eros Eau de Toilette",
+    "family": "Sweet",
+    "notes": [
+      "Mint",
+      "Green Apple",
+      "Tonka",
+      "Vanilla",
+      "Cedar"
+    ],
+    "desc": "A lively aromatic fragrance with mint, fruit and sweet woods.",
+    "m": [
+      83,
+      73,
+      55,
+      79
+    ],
+    "pop": 83,
+    "concentration": "Eau de Toilette",
+    "identitySource": "https://www.versace.com/us/en/men/accessories/fragrances-body-care/eros/eros-edt-100-ml-blue/R740010-R100MLS_RNUL.html",
+    "photoReason": "Exact reusable photo not verified.",
+    "source": "https://commons.wikimedia.org/wiki/File:VersaceEros121.jpg",
+    "credit": "Benny191 · CC BY-SA 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "None; original bytes preserved",
+    "photo_url": "/photos/5.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 6,
+    "brand": "Azzaro",
+    "name": "The Most Wanted Parfum",
+    "family": "Warm & Spicy",
+    "notes": [
+      "Ginger",
+      "Woods",
+      "Bourbon Vanilla"
+    ],
+    "desc": "A bold, warm fragrance with spicy and vanilla-like character.",
+    "m": [
+      90,
+      24,
+      70,
+      85
+    ],
+    "pop": 80,
+    "concentration": "Parfum",
+    "identitySource": "https://www.azzaro.com/en/fragrances/azzaro-the-most-wanted/parfum",
+    "photoReason": "No exact permitted Parfum photo verified; the Parfumo/retailer image has no established reuse license.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 7,
+    "brand": "Chanel",
+    "name": "Bleu de Chanel Eau de Parfum",
+    "family": "Woody",
+    "notes": [
+      "Citrus",
+      "Grapefruit",
+      "Incense",
+      "Sandalwood"
+    ],
+    "desc": "An elegant woody-aromatic scent with citrus and incense nuances.",
+    "m": [
+      36,
+      79,
+      88,
+      65
+    ],
+    "pop": 84,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.chanel.com/us/fragrance/p/107360/bleu-de-chanel-eau-de-parfum-spray/",
+    "photoReason": "Exact reusable photo not verified.",
+    "source": "https://unsplash.com/photos/bleu-de-chanel-perfume-bottle-2b0JeJTEclQ",
+    "credit": "Jeroen den Otter · Unsplash License",
+    "licenseURL": "https://unsplash.com/license",
+    "changes": "Image host resized to 1400px; no retouching",
+    "photo_url": "/photos/7.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 8,
+    "brand": "Valentino",
+    "name": "Uomo Born in Roma Intense",
+    "family": "Sweet",
+    "notes": [
+      "Vanilla",
+      "Lavandin",
+      "Vetiver"
+    ],
+    "desc": "A rich vanilla-forward aromatic scent with smooth woody depth.",
+    "m": [
+      88,
+      38,
+      60,
+      80
+    ],
+    "pop": 78,
+    "concentration": "Eau de Parfum Intense",
+    "identitySource": "https://www.valentino-beauty.us/fragrances/fragrances-men/born-in-roma-uomo-intense/born-in-roma-uomo-eau-de-parfum-intense-MPL01907.html",
+    "photoReason": "Free candidates show other Valentino Uomo editions, not Uomo Born in Roma Intense.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 9,
+    "brand": "Armani",
+    "name": "Stronger With You Intensely",
+    "family": "Sweet",
+    "notes": [
+      "Pink Pepper",
+      "Toffee",
+      "Amberwood",
+      "Vanilla"
+    ],
+    "desc": "A cozy gourmand-leaning scent with sweet and amber facets.",
+    "m": [
+      95,
+      20,
+      63,
+      85
+    ],
+    "pop": 77,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.giorgioarmanibeauty.com.au/fragrances/mens-fragrances/emporio-armani-mens/stronger-with-you-intensely-eau-de-parfum/ww-00180-arm.html",
+    "photoReason": "The free candidate identifies Stronger With You Powerfully, not Intensely.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 10,
+    "brand": "Prada",
+    "name": "Luna Rossa Carbon",
+    "family": "Fresh",
+    "notes": [
+      "Bergamot",
+      "Lavender",
+      "Metallic Notes",
+      "Ambroxan"
+    ],
+    "desc": "A clean mineral aromatic fragrance with lavender and citrus.",
+    "m": [
+      24,
+      91,
+      52,
+      60
+    ],
+    "pop": 64,
+    "concentration": "Eau de Toilette",
+    "identitySource": "https://www.prada-beauty.com/fragrance/luna-rossa/luna-rossa-carbon-eau-de-toilette/MPL01367.html",
+    "photoReason": "Exact reusable photo not verified.",
+    "source": "https://commons.wikimedia.org/wiki/File:Bottles_of_Eau_de_Toilette.jpg",
+    "credit": "Shack · CC BY-SA 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Cropped with an SVG viewBox to isolate Luna Rossa Carbon; original JPEG included. Crop licensed CC BY-SA 4.0.",
+    "photo_url": "/photos/10.svg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 11,
+    "brand": "Tom Ford",
+    "name": "Oud Wood",
+    "family": "Woody",
+    "notes": [
+      "Rosewood",
+      "Cardamom",
+      "Oud",
+      "Sandalwood",
+      "Vanilla"
+    ],
+    "desc": "A refined woody scent with warm spice and smooth woods.",
+    "m": [
+      42,
+      23,
+      96,
+      68
+    ],
+    "pop": 70,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.tomfordbeauty.com/products/oud-wood-eau-de-parfum",
+    "photoReason": "An exact Oud Wood photograph by Adam Jones is All rights reserved. Another retailer has conflicting CC and no-copying terms, so its photos were excluded.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  },
+  {
+    "id": 12,
+    "brand": "Maison Margiela",
+    "name": "By the Fireplace",
+    "family": "Warm & Spicy",
+    "notes": [
+      "Clove",
+      "Chestnut",
+      "Guaiac Wood",
+      "Vanilla"
+    ],
+    "desc": "A smoky, sweet and comforting fragrance reminiscent of warm fireside woods.",
+    "m": [
+      82,
+      16,
+      89,
+      75
+    ],
+    "pop": 68,
+    "concentration": "Eau de Toilette",
+    "identitySource": "https://www.maisonmargiela-fragrances.us/fragrances/replica-eau-de-toilette/replica-by-the-fireplace/MM005.html",
+    "photoReason": "Permitted Replica candidates show Under the Stars, Whispers in the Library or Jazz Club, not By the Fireplace.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 13,
+    "brand": "Creed",
+    "name": "Aventus",
+    "family": "Fruity",
+    "notes": [
+      "Pineapple",
+      "Bergamot",
+      "Birch",
+      "Musk"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.creedfragrance.com/c/journal/difference-between-aventus-and-aventuscologne/",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "source": "https://www.flickr.com/photos/24326549@N04/35154608906",
+    "credit": "Alan Abdulqader Saeed Farhadi · CC BY 2.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/2.0/",
+    "changes": "None; original Flickr large rendition downloaded as provided.",
+    "photo_url": "/photos/13.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 14,
+    "brand": "Parfums de Marly",
+    "name": "Layton",
+    "family": "Warm & Spicy",
+    "notes": [
+      "Apple",
+      "Lavender",
+      "Vanilla",
+      "Cardamom"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://us.parfums-de-marly.com/products/layton",
+    "photoReason": "No exact Layton photograph with confirmed reuse permission verified.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  },
+  {
+    "id": 15,
+    "brand": "Parfums de Marly",
+    "name": "Althaïr",
+    "family": "Sweet",
+    "notes": [
+      "Orange Blossom",
+      "Cinnamon",
+      "Vanilla"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://us.parfums-de-marly.com/products/althair",
+    "photoReason": "Exact Althaïr Flickr photographs by Mon Credo and John Fenner are All rights reserved; retailer reuse rights are unconfirmed.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  },
+  {
+    "id": 16,
+    "brand": "Xerjoff",
+    "name": "Naxos",
+    "family": "Sweet",
+    "notes": [
+      "Honey",
+      "Tobacco",
+      "Lavender"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.xerjoff.com/USA/xerjoff-1861-collection/201-naxos-eau-de-parfum.html",
+    "photoReason": "The exact Naxos Flickr photograph by bashshopco is All rights reserved; no permitted exact alternative verified.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  },
+  {
+    "id": 17,
+    "brand": "Maison Francis Kurkdjian",
+    "name": "Baccarat Rouge 540",
+    "family": "Amber",
+    "notes": [
+      "Saffron",
+      "Jasmine",
+      "Amberwood"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.franciskurkdjian.com/us-en/p/baccarat-rouge-540-eau-de-parfum-RA12232.html",
+    "photoReason": "The exact Baccarat Rouge 540 EDP Flickr photo by Roi is All rights reserved. Other candidates include Extrait or imitation products.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  },
+  {
+    "id": 18,
+    "brand": "Louis Vuitton",
+    "name": "Imagination",
+    "family": "Fresh",
+    "notes": [
+      "Citron",
+      "Black Tea",
+      "Ambrox"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://fr.louisvuitton.com/fra-fr/produits/imagination-nvprod2970067v/LP0219",
+    "photoReason": "No exact Imagination EDP photograph with confirmed reuse permission verified.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  },
+  {
+    "id": 19,
+    "brand": "Louis Vuitton",
+    "name": "Afternoon Swim",
+    "family": "Fresh",
+    "notes": [
+      "Orange",
+      "Mandarin",
+      "Bergamot"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://fr.louisvuitton.com/fra-fr/produits/afternoon-swim-nvprod3630151v/LP0314",
+    "photoReason": "The exact Afternoon Swim Flickr photograph by Roi is All rights reserved; retailer reuse rights are unconfirmed.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  },
+  {
+    "id": 20,
+    "brand": "Rabanne",
+    "name": "1 Million Elixir",
+    "family": "Sweet",
+    "notes": [
+      "Apple",
+      "Vanilla",
+      "Tonka"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Parfum Intense",
+    "identitySource": "https://www.rabanne.com/nl/en/fragrance/p/1-million-elixir--000000000065177272",
+    "photoReason": "No permitted exact 1 Million Elixir Parfum Intense photograph verified; Sephora image reuse rights are unconfirmed.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 21,
+    "brand": "Rabanne",
+    "name": "Invictus Victory Elixir",
+    "family": "Sweet",
+    "notes": [
+      "Lavender",
+      "Vanilla",
+      "Tonka"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Parfum Intense",
+    "identitySource": "https://www.rabanne.com/ww/en/fragrance/p/invictus-victory-elixir--000000000065188730",
+    "photoReason": "No exact Invictus Victory Elixir Parfum Intense photograph with confirmed reuse permission verified.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 22,
+    "brand": "Jean Paul Gaultier",
+    "name": "Le Male Elixir",
+    "family": "Sweet",
+    "notes": [
+      "Mint",
+      "Lavender",
+      "Vanilla",
+      "Honey"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Parfum",
+    "identitySource": "https://www.jeanpaulgaultier.com/ww/en/fragrances/range-le-male/le-male-elixir-parfum",
+    "photoReason": "No exact Le Male Elixir Parfum photograph with confirmed reuse permission verified. Free search results show other fragrances.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 23,
+    "brand": "Jean Paul Gaultier",
+    "name": "Le Beau Paradise Garden",
+    "family": "Fresh",
+    "notes": [
+      "Green Notes",
+      "Coconut",
+      "Sandalwood"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.jeanpaulgaultier.com/us/en_US/p/range-le-beau/le-beau-paradise-garden-eau-de-parfum-000000000065199798",
+    "photoReason": "No exact Le Beau Paradise Garden EDP photograph with confirmed reuse permission verified.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 24,
+    "brand": "Azzaro",
+    "name": "The Most Wanted Eau de Parfum Intense",
+    "family": "Warm & Spicy",
+    "notes": [
+      "Cardamom",
+      "Toffee",
+      "Amberwood"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum Intense",
+    "identitySource": "https://www.azzaro.com/en/fragrances/azzaro-the-most-wanted/eau-de-parfum-intense",
+    "photoReason": "No exact The Most Wanted EDP Intense photograph with confirmed reuse permission verified; different concentrations were excluded.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 25,
+    "brand": "Valentino",
+    "name": "Uomo Born in Roma Coral Fantasy",
+    "family": "Fruity",
+    "notes": [
+      "Red Apple",
+      "Sage",
+      "Tobacco"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Toilette",
+    "identitySource": "https://www.valentino-beauty.com/int/fragrances/men-fragrances/born-in-roma-uomo-coral-fantasy/3614273672412.html",
+    "photoReason": "Free candidates show Donna Coral Fantasy or other Uomo editions, not Uomo Coral Fantasy EDT.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 26,
+    "brand": "Viktor&Rolf",
+    "name": "Spicebomb Extreme",
+    "family": "Warm & Spicy",
+    "notes": [
+      "Black Pepper",
+      "Tobacco",
+      "Vanilla"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://us.viktor-rolf.com/fragrance/spicebomb-extreme-VKR_034.html",
+    "photoReason": "The exact Spicebomb Extreme Flickr photograph by GRASSO Rosario is All rights reserved. Free Night Vision photos are a different fragrance.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 27,
+    "brand": "Dolce & Gabbana",
+    "name": "The One Eau de Parfum",
+    "family": "Warm & Spicy",
+    "notes": [
+      "Grapefruit",
+      "Ginger",
+      "Tobacco"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.dolcegabbana.com/en-us/beauty/perfumes-for-him/the-one-for-men/eau-de-parfum---158057971180561.html",
+    "photoReason": "Inspected free The One photos show the women’s bottle, not The One for Men EDP; excluded.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 28,
+    "brand": "Givenchy",
+    "name": "Gentleman Réserve Privée",
+    "family": "Woody",
+    "notes": [
+      "Whisky",
+      "Iris",
+      "Cedar"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.givenchybeauty.com/us/p/gentleman-reserve-privee-P000112.html",
+    "photoReason": "The free Gentleman candidates do not establish Réserve Privée; Gentlemen Only is a different fragrance.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 29,
+    "brand": "Prada",
+    "name": "L’Homme",
+    "family": "Fresh",
+    "notes": [
+      "Iris",
+      "Neroli",
+      "Amber"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Toilette",
+    "identitySource": "https://www.prada-beauty.com/fragrance/lhomme-prada/lhomme-prada-eau-de-toilette/MPL01352.html",
+    "photoReason": "Exact reusable photo not verified.",
+    "source": "https://unsplash.com/photos/prada-cologne-bottle-on-a-wooden-surface-0b1VB4SLh3I",
+    "credit": "Sierra Alpha Juliet · Unsplash License",
+    "licenseURL": "https://unsplash.com/license",
+    "changes": "Resized only",
+    "editionNote": "Standard edition: Eau de Toilette",
+    "photo_url": "/photos/29.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 30,
+    "brand": "Armani",
+    "name": "Acqua di Giò Profondo",
+    "family": "Fresh",
+    "notes": [
+      "Marine Notes",
+      "Bergamot",
+      "Rosemary"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.giorgioarmanibeauty-usa.com/fragrances/mens-cologne/acqua-di-gio/acqua-di-gio-profondo-eau-de-parfum/A2267.html",
+    "photoReason": "Exact reusable photo not verified.",
+    "source": "https://www.pexels.com/photo/aqua-di-gio-profondo-perfume-in-water-splash-35002363/",
+    "credit": "Christopher Welsch Leveroni · Pexels License",
+    "licenseURL": "https://www.pexels.com/license/",
+    "changes": "Resized only; concentration identified from original bottle design and brand product",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_url": "/photos/30.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 31,
+    "brand": "Burberry",
+    "name": "Hero Eau de Parfum",
+    "family": "Woody",
+    "notes": [
+      "Pine Needle",
+      "Benzoin",
+      "Cedar"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://us.burberry.com/burberry-hero-eau-de-parfum-100ml-p40827901",
+    "photoReason": "Inspected free Burberry candidates show other fragrances or cannot establish Hero EDP.",
+    "photo_status": "missing"
+  },
+  {
+    "id": 32,
+    "brand": "Montblanc",
+    "name": "Explorer",
+    "family": "Woody",
+    "notes": [
+      "Bergamot",
+      "Vetiver",
+      "Patchouli"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.montblanc.com/en-us/explorer-eau-de-parfum-100-ml-MB124069.html",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "source": "https://www.pexels.com/photo/perfume-bottle-in-close-up-photography-15190739/",
+    "credit": "Jonathan Cooper · Pexels License",
+    "licenseURL": "https://www.pexels.com/license/",
+    "changes": "Downloaded at 1000px width, no other edits.",
+    "photo_url": "/photos/32.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 33,
+    "brand": "Mancera",
+    "name": "Cedrat Boise",
+    "family": "Fruity",
+    "notes": [
+      "Citrus",
+      "Blackcurrant",
+      "Cedar"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.manceraparfums.com/en/woody/16-cedrat-boise.html",
+    "photoReason": "Exact reusable photo not verified.",
+    "source": "https://unsplash.com/photos/three-bottles-of-cologne-sitting-on-top-of-a-table-0sHorINihAI",
+    "credit": "Beautinow Niche Perfume · Unsplash License",
+    "licenseURL": "https://unsplash.com/license",
+    "changes": "Crop [1127,460,1310,866] from 1600px-wide downloaded original; small 183x406 asset",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_url": "/photos/33.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 34,
+    "brand": "Nishane",
+    "name": "Hacivat",
+    "family": "Fruity",
+    "notes": [
+      "Pineapple",
+      "Grapefruit",
+      "Oakmoss"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Extrait de Parfum",
+    "identitySource": "https://nishane.com/product/hacivat/",
+    "photoReason": "Exact reusable photo not verified.",
+    "source": "https://www.pexels.com/photo/bottle-of-perfume-next-to-artificial-dried-lotus-15007550/",
+    "credit": "Beautinow Niche Perfume · Pexels License",
+    "licenseURL": "https://www.pexels.com/license/",
+    "changes": "Resized only",
+    "editionNote": "Standard edition: Extrait de Parfum",
+    "photo_url": "/photos/34.jpg",
+    "photo_status": "verified"
+  },
+  {
+    "id": 35,
+    "brand": "Tom Ford",
+    "name": "Tobacco Vanille",
+    "family": "Sweet",
+    "notes": [
+      "Tobacco",
+      "Vanilla",
+      "Spices"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://www.tomfordbeauty.com/products/tobacco-vanille-eau-de-parfum",
+    "photoReason": "Exact Tobacco Vanille Flickr photographs are All rights reserved. Free Tom Ford candidates show Ombré Leather or unreadable bottles.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  },
+  {
+    "id": 36,
+    "brand": "Initio",
+    "name": "Side Effect",
+    "family": "Warm & Spicy",
+    "notes": [
+      "Rum",
+      "Tobacco",
+      "Vanilla"
+    ],
+    "desc": "Catalog preview. Scent notes are an editorial summary; verify against brand information before purchase.",
+    "m": [
+      55,
+      55,
+      55,
+      55
+    ],
+    "pop": 50,
+    "concentration": "Eau de Parfum",
+    "identitySource": "https://initioparfums.com/products/side-effect",
+    "photoReason": "No exact Side Effect EDP photograph with confirmed reuse permission verified.",
+    "editionNote": "Standard edition: Eau de Parfum",
+    "photo_status": "missing"
+  }
+]
