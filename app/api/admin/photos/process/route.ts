@@ -1,3 +1,4 @@
+import {searchBasenotes} from '../../../../../lib/basenotes';
 import {NextResponse} from 'next/server';
 import {authorized,sameOrigin,serverDb} from '../../../../../lib/db';
 
@@ -75,6 +76,8 @@ async function processJobs(){
   try{
    const fragrance=job.fragrances;
    if(!fragrance)throw Error(`Fragrance ${job.fragrance_id} is unavailable`);
+   const links=await searchBasenotes(fragrance.brand,fragrance.name).catch(()=>[]);
+   console.log('Basenotes pages found:',links.length);
    const api=new URL('https://commons.wikimedia.org/w/api.php');
    api.searchParams.set('action','query');
    api.searchParams.set('generator','search');
