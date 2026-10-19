@@ -55,8 +55,8 @@ async function processJobs(){
  const {data:jobs,error}=await db.from('photo_jobs')
   .select('id,fragrance_id,attempts,status,fragrances(brand,name,concentration)')
   .in('status',['pending','no_match','processing'])
-  .lt('attempts',4)
-  .or(`last_checked.is.null,last_checked.lt.${cutoff}`)
+  .lt('attempts',100)
+  .or(`last_checked.is.null,last_checked.lt.${new Date(Date.now()-60000).toISOString()}`)
   .order('last_checked',{ascending:true,nullsFirst:true})
   .limit(12)
   .returns<PhotoJob[]>();
