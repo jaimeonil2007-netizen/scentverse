@@ -5,14 +5,14 @@ const sessionCookie='sv_admin_session';
 const sessionDuration=12*60*60;
 
 export function serverDb(){
- const url=process.env.NEXT_PUBLIC_SUPABASE_URL;
- const key=process.env.SUPABASE_SERVICE_ROLE_KEY;
+ const url=process.env.SCENTVERSE_SUPABASE_URL;
+ const key=process.env.SCENTVERSE_SUPABASE_SECRET_KEY;
  if(!url||!key)throw Error('Supabase not configured');
  return createClient(url,key,{auth:{persistSession:false}});
 }
 
 export function configured(){
- return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL&&process.env.SUPABASE_SERVICE_ROLE_KEY);
+ return Boolean(process.env.SCENTVERSE_SUPABASE_URL&&process.env.SCENTVERSE_SUPABASE_SECRET_KEY);
 }
 
 function matchesSecret(value:string,secret:string){

@@ -1,8 +1,8 @@
 import {createClient} from '@supabase/supabase-js';
 import {readFileSync} from 'node:fs';
 
-const url=process.env.NEXT_PUBLIC_SUPABASE_URL;
-const key=process.env.SUPABASE_SERVICE_ROLE_KEY;
+const url=process.env.SCENTVERSE_SUPABASE_URL;
+const key=process.env.SCENTVERSE_SUPABASE_SECRET_KEY;
 if(!url||!key)throw Error('Set Supabase env vars first');
 
 const db=createClient(url,key);
