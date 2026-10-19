@@ -57,7 +57,7 @@ async function processJobs(){
   .lt('attempts',4)
   .or(`last_checked.is.null,last_checked.lt.${cutoff}`)
   .order('last_checked',{ascending:true,nullsFirst:true})
-  .limit(8)
+  .limit(12)
   .returns<PhotoJob[]>();
  if(error)throw error;
  let checked=0,candidates=0,failures=0;
@@ -80,7 +80,7 @@ async function processJobs(){
    api.searchParams.set('generator','search');
    api.searchParams.set('gsrsearch',`filetype:bitmap ${fragrance.brand} ${fragrance.name}`);
    api.searchParams.set('gsrnamespace','6');
-   api.searchParams.set('gsrlimit','50');
+   api.searchParams.set('gsrlimit','100');
    api.searchParams.set('prop','imageinfo');
    api.searchParams.set('iiprop','url|extmetadata');
    api.searchParams.set('iiurlwidth','480');
