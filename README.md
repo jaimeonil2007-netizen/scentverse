@@ -1,26 +1,29 @@
-# SCENTVERSE v14 — public website starter
+# SCENTVERSE v14
 
-A Next.js + Supabase starter based on the supplied SCENTVERSE v13. **Not yet deployed.** It preserves all 36 catalog records and 11 original embedded photos, exported as local files for the new website. The exact original v13 (including search, saved items, comparisons, photo credits and other features) is retained at `/legacy-v13.html`. The new database-powered catalog currently implements search, filters, sorting and bottle display; other v13 features are preserved in the legacy page but not yet migrated into the new interface.
+SCENTVERSE v14 keeps the existing 36 fragrance records, original photos, and full v13 experience at `/legacy-v13.html`, alongside the newer database-powered catalog. The photo discovery worker uses Wikimedia Commons and Supabase only; it does not call AI services or consume AI credits during normal operation. Nothing discovered is published without an administrator verifying the exact edition and license.
 
 ## Local preview
 
-1. Install Node.js 20+ and run `npm install`, then `npm run dev`.
-2. Open `http://localhost:3000`. Without database settings, it uses the bundled 36-item catalog.
-3. Open `/legacy-v13.html` to access the complete original version.
+1. Use Node.js 20+ and run `npm install`, then `npm run dev`.
+2. Open `http://localhost:3000`. Without database settings, the site uses the bundled catalog.
+3. `/legacy-v13.html` opens the complete original version. `/admin/photos` is the secure photo and fragrance dashboard.
 
-## Deploy for free
+## Supabase setup
 
-1. Create a **Supabase** project. Run `supabase/schema.sql` in its SQL editor. Create a public Storage bucket named `fragrance-photos` (only approved images go here).
-2. Copy `.env.example` to `.env.local` and fill in the Supabase project URL, anon key and **server-only** service-role key. Generate separate random admin and cron secrets. Never put the service-role key in a `NEXT_PUBLIC_` variable or commit `.env.local`.
-3. Run `npm run seed` (load the environment variables in your shell first). This inserts the 36 records and queues the 25 missing photos. In production, use the approved, source-credited images; see the note below about storage URLs.
-4. Push this project to a GitHub repository. Import it into **Vercel**, set the same environment variables in project settings and deploy. Choose an available free `*.vercel.app` project address. No address has been reserved or deployed by this package.
-5. Trigger photo discovery via `POST /api/admin/photos/process` with `Authorization: Bearer YOUR_CRON_SECRET` (or admin token). Schedule this with a hosting cron service at an appropriate interval, or run it manually. The route checks at most three jobs per call and limits retries. It **does not** publish unverified matches.
-6. Review `photo_candidates` in Supabase. Compare source photos with official brand references, check concentrations and license conditions. Only then call `POST /api/admin/photos/approve` with an admin token and JSON `{"candidateId":123,"confirmedExactEdition":true,"confirmedLicense":true}`. This downloads the approved Wikimedia Commons image to your Supabase Storage and publishes its URL.
-7. Add new products using `POST /api/admin/import` with admin token and JSON `{"items":[{"brand":"Example","name":"Sample","concentration":"Eau de Parfum","family":"Woody","notes":["Cedar"]}]}`. Limit 500 per request; imports queue new image jobs.
+1. Create a Supabase project. Run `supabase/schema.sql` in its SQL editor. It is safe to rerun on an existing database: it adds attribution and worker fields, enqueues existing records with missing photos, and installs an insert trigger so every new fragrance gets a photo job.
+2. Create a **public** Storage bucket named `fragrance-photos`. Only manually approved images are copied there.
+3. Configure `.env.local` from `.env.example` with `NEXT_PUBLIC_SUPABASE_URL`, the anon key, and the **server-only** service-role key. Set strong, separate random values for `ADMIN_API_TOKEN` and `CRON_SECRET`. Never expose the service-role key or either secret in a `NEXT_PUBLIC_` variable or commit `.env.local`.
+4. Run `npm run seed` if you need the supplied 36 catalog records in the database. The seed command inserts only records that are absent and queues records that currently have no photo; it does not overwrite existing fragrance rows or photo jobs.
 
-## Current limitations / next engineering steps
+## Photo workflow
 
-- Photo discovery currently searches **Wikimedia Commons only**, using conservative license filtering. It is a real discovery pipeline, but many commercial bottles won't have reusable photos. Licensed brand/retailer data feeds require separate agreements. Search results may be unrelated, so admin review is mandatory.
-- Before production scale, add a proper admin dashboard, persistent license/attribution display for newly approved images, image review thumbnails, rate limiting, background job scheduling, CSV import, user accounts/favorites, and migration of the other v13 UI features. Current candidate attribution is returned from the approval endpoint and stored in `photo_candidates` but is not yet shown on public cards.
-- The 11 bundled images are local paths. Seeded records use these paths, which work on the same Vercel deployment. Original license details remain in the preserved v13 page.
-- This starter is not a verified production service, and no domain, hosting account, database, or cron job has been created for you.
+- Add a fragrance in `/admin/photos` or through `POST /api/admin/import` using an admin bearer token. New inserts are queued automatically by the database trigger, including inserts made outside the import API.
+- The scheduled Vercel cron calls `GET /api/admin/photos/process` daily. It can also be run manually from the dashboard or with a `Bearer $CRON_SECRET` / admin bearer token. Each run claims up to three jobs; failed or unmatched jobs retry no more often than daily and stop after four attempts.
+- Discovery searches Wikimedia Commons for titles containing the exact brand and fragrance name and compatible concentration. Only CC0, CC BY 3.0/4.0, CC BY-SA 3.0/4.0, and public-domain results are shown. Commons metadata is not treated as proof of the bottle identity: candidates remain private until review.
+- In the dashboard, compare each candidate with an authoritative reference and verify the license conditions. Approving copies the image to Supabase Storage, updates the fragrance photo, and retains creator/license/source attribution for the public catalog. Rejections remain unpublished.
+
+## Deployment
+
+Deploy the repository to Vercel and configure the same environment variables in project settings. `vercel.json` schedules photo processing daily at 09:00 UTC; Vercel sends the `CRON_SECRET` bearer token when configured. The scheduled route checks that secret, while the dashboard uses short-lived, signed, HttpOnly, SameSite=Strict admin cookies. For non-Vercel hosting, configure an equivalent daily scheduler to call the same route.
+
+Wikimedia Commons contains limited reusable commercial bottle photography, and exact-title filtering intentionally favors precision over recall. A missing match is not replaced with an AI-generated photo; it can be revisited manually or after adding another licensed source.
