@@ -78,7 +78,7 @@ async function processJobs(){
    const api=new URL('https://commons.wikimedia.org/w/api.php');
    api.searchParams.set('action','query');
    api.searchParams.set('generator','search');
-   api.searchParams.set('gsrsearch',`filetype:bitmap "${fragrance.brand} ${fragrance.name}"`);
+   api.searchParams.set('gsrsearch',`filetype:bitmap ${fragrance.brand} ${fragrance.name}`);
    api.searchParams.set('gsrnamespace','6');
    api.searchParams.set('gsrlimit','20');
    api.searchParams.set('prop','imageinfo');
