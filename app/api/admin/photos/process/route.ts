@@ -1,205 +1,361 @@
-import {searchBasenotes} from '../../../../../lib/basenotes';
-import {NextResponse} from 'next/server';
 import {authorized,sameOrigin,serverDb} from '../../../../../lib/db';
+import {hasCompatibleConcentration,hasExactBottleDescription,hasExactProductEvidence} from '../../../../../lib/photo-matching';
+import {isVerifiedAutoPublishLicense} from '../../../../../lib/photo-rights';
+import {fetchWikimediaJson,WikimediaDeferredError} from '../../../../../lib/wikimedia';
+import {NextResponse} from 'next/server';
 
-const allowedLicense=/^(CC0(?: 1\.0)?|CC BY(?:-SA)? (?:3\.0|4\.0)|Public domain(?: mark 1\.0)?)$/i;
-const ignoredWords=new Set(['de','del','la','le','the','and','for','of']);
-const concentrationAliases:Record<string,string[]>={
- 'eau de parfum':['eau de parfum','edp'],
- 'eau de toilette':['eau de toilette','edt'],
- 'eau de cologne':['eau de cologne','edc'],
- 'parfum':['parfum','extrait','pure perfume']
+const batchSize=5;
+const maximumAttempts=4;
+const jobRetryMs=24*60*60*1000;
+const staleJobMs=10*60*1000;
+const jobSelect='id,fragrance_id,attempts,status,last_checked,next_attempt_at,fragrances(brand,name,concentration,image_url)';
+
+type Fragrance={brand:string;name:string;concentration:string;image_url:string|null};
+type PhotoJob={
+ id:number;
+ fragrance_id:number;
+ attempts:number;
+ status:string;
+ last_checked:string|null;
+ next_attempt_at:string|null;
+ fragrances:Fragrance|null
+};
+type CommonsPage={
+ title?:string;
+ imageinfo?:Array<{
+  url?:string;
+  thumburl?:string;
+  descriptionurl?:string;
+  extmetadata?:Record<string,{value?:string}>
+ }>
+};
+type CommonsResult={
+ query?:{pages?:CommonsPage[]};
+ continue?:Record<string,unknown>
+};
+type Candidate={
+ fragrance_id:number;
+ source_page:string;
+ candidate_url:string;
+ license_name:string|null;
+ license_url:string|null;
+ creator:string|null;
+ rights_basis:string|null;
+ matched_title:string;
+ thumbnail_url:string|null;
+ match_status:'needs_review'
+};
+type DiscoveredCandidate={
+ candidate:Candidate;
+ autoEligible:boolean
 };
 
-type Fragrance={brand:string;name:string;concentration:string};
-type PhotoJob={id:number;fragrance_id:number;attempts:number;status:string;fragrances:Fragrance|null};
-type CommonsPage={title?:string;imageinfo?:Array<{url?:string;thumburl?:string;descriptionurl?:string;extmetadata?:Record<string,{value?:string}>}>};
-
-function normalize(value:string){
- return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-}
-
-function requiredWords(value:string){
- return normalize(value).split(/\s+/).filter(word=>(word.length>1||/\d/.test(word))&&!ignoredWords.has(word));
-}
-
-function concentrationType(value:string){
- const normalized=normalize(value);
- return Object.entries(concentrationAliases).find(([,aliases])=>aliases.some(alias=>normalized.includes(normalize(alias))))?.[0]||null;
-}
-
-function isExactTitleMatch(fragrance:Fragrance,title:string){
- const titleText=normalize(title);
- const expected=[...requiredWords(fragrance.brand),...requiredWords(fragrance.name)];
- if(!expected.length||expected.some(word=>!titleText.split(' ').includes(word)))return false;
- const targetConcentration=concentrationType(fragrance.concentration);
- const titleConcentration=concentrationType(title);
- return !targetConcentration||!titleConcentration||targetConcentration===titleConcentration;
-}
-
 function cleanMetadata(value:string|undefined){
- return (value||'').replace(/<[^>]*>/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim().slice(0,400);
+ return (value||'').replace(/<[^>]*>/g,' ').replace(/&amp;/g,'&')
+  .replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'")
+  .replace(/&lt;/g,'<').replace(/&gt;/g,' ')
+  .replace(/\s+/g,' ').trim().slice(0,1000);
 }
 
-function safeHttpsUrl(value:string|undefined,hostname:string){
+function safeHttpsUrl(value:string|undefined,hosts:string[]){
  if(!value)return null;
  try{
   const url=new URL(value);
-  return url.protocol==='https:'&&url.hostname===hostname?url.toString():null;
+  return url.protocol==='https:'&&hosts.includes(url.hostname)?url.toString():null;
  }catch{return null}
+}
+
+function safeLicenseUrl(value:string|null){
+ if(!value)return null;
+ try{
+  const url=new URL(value);
+  const allowedHost=['creativecommons.org','www.creativecommons.org','publicdomain.org','www.publicdomain.org'].includes(url.hostname);
+  return url.protocol==='https:'&&allowedHost?url.toString():null;
+ }catch{return null}
+}
+
+function commonsCandidates(fragrance:Fragrance,jobId:number,pages:CommonsPage[],completeSearch:boolean){
+ const rows:DiscoveredCandidate[]=[];
+ for(const page of pages){
+  const info=page.imageinfo?.[0];
+  const metadata=info?.extmetadata;
+  if(!metadata)continue;
+  const title=cleanMetadata(page.title);
+  const description=cleanMetadata(metadata.ImageDescription?.value);
+  const objectName=cleanMetadata(metadata.ObjectName?.value);
+  const evidence=`${title} ${objectName} ${description}`;
+  const license=cleanMetadata(metadata.LicenseShortName?.value);
+  const image=safeHttpsUrl(info.url,['upload.wikimedia.org']);
+  const sourcePage=safeHttpsUrl(info.descriptionurl,['commons.wikimedia.org']);
+  const licenseUrl=safeLicenseUrl(cleanMetadata(metadata.LicenseUrl?.value)||null);
+  if(!image||!sourcePage||!hasExactProductEvidence(fragrance.brand,fragrance.name,evidence)||
+   !hasCompatibleConcentration(fragrance.concentration,evidence))continue;
+  const creator=cleanMetadata(metadata.Artist?.value)||null;
+  const autoEligible=completeSearch&&isVerifiedAutoPublishLicense(license,licenseUrl)&&Boolean(creator)&&
+   hasExactBottleDescription(fragrance.brand,fragrance.name,fragrance.concentration,description);
+  rows.push({
+   candidate:{
+    fragrance_id:jobId,
+    source_page:sourcePage,
+    candidate_url:image,
+    license_name:license||null,
+    license_url:licenseUrl,
+    creator,
+    rights_basis:license?`Wikimedia Commons license metadata: ${license}`:null,
+    matched_title:title,
+    thumbnail_url:safeHttpsUrl(info.thumburl,['upload.wikimedia.org']),
+    match_status:'needs_review'
+   },
+   autoEligible
+  });
+ }
+ return rows;
+}
+
+async function discoverCommons(fragrance:Fragrance){
+ const api=new URL('https://commons.wikimedia.org/w/api.php');
+ api.searchParams.set('action','query');
+ api.searchParams.set('generator','search');
+ api.searchParams.set('gsrsearch',`filetype:bitmap ${fragrance.brand} "${fragrance.name}"`);
+ api.searchParams.set('gsrnamespace','6');
+ api.searchParams.set('gsrlimit','50');
+ api.searchParams.set('prop','imageinfo');
+ api.searchParams.set('iiprop','url|extmetadata');
+ api.searchParams.set('iiurlwidth','480');
+ api.searchParams.set('format','json');
+ api.searchParams.set('formatversion','2');
+ const result=await fetchWikimediaJson<CommonsResult>(api);
+ return {pages:result.query?.pages||[],completeSearch:!result.continue};
+}
+
+function imageSignature(bytes:Buffer,mime:string){
+ if(mime==='image/jpeg')return bytes.length>=3&&bytes[0]===0xff&&bytes[1]===0xd8&&bytes[2]===0xff;
+ if(mime==='image/png')return bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]));
+ return mime==='image/webp'&&bytes.toString('ascii',0,4)==='RIFF'&&bytes.toString('ascii',8,12)==='WEBP';
+}
+
+function approvedImageUrl(candidate:Candidate){
+ if(candidate.source_page.startsWith('https://commons.wikimedia.org/'))
+  return safeHttpsUrl(candidate.candidate_url,['upload.wikimedia.org']);
+ return null;
+}
+
+async function publishCandidate(db:ReturnType<typeof serverDb>,candidate:Candidate,candidateId:number){
+ if(!isVerifiedAutoPublishLicense(candidate.license_name,candidate.license_url))
+  throw Error('Photo license is not verified for automatic publication');
+ const {data:fragrance,error:fragranceError}=await db.from('fragrances')
+  .select('id,image_url').eq('id',candidate.fragrance_id).maybeSingle();
+ if(fragranceError)throw fragranceError;
+ if(!fragrance||fragrance.image_url)return false;
+ const imageUrl=approvedImageUrl(candidate);
+ if(!imageUrl)throw Error('Image URL is outside an approved source');
+ const response=await fetch(imageUrl,{signal:AbortSignal.timeout(20000)});
+ if(!response.ok)throw Error(`Image download failed with HTTP ${response.status}`);
+ if(!approvedImageUrl({...candidate,candidate_url:response.url}))
+  throw Error('Image redirect left the approved source');
+ const mime=(response.headers.get('content-type')||'').split(';')[0].trim().toLowerCase();
+ if(!['image/jpeg','image/png','image/webp'].includes(mime))
+  throw Error('Unsupported image type');
+ const bytes=Buffer.from(await response.arrayBuffer());
+ if(bytes.length<100||bytes.length>8_000_000||!imageSignature(bytes,mime))
+  throw Error('Invalid image data or size');
+ const extension=mime==='image/jpeg'?'jpg':mime==='image/png'?'png':'webp';
+ const path=`fragrance-${candidate.fragrance_id}-${candidateId}.${extension}`;
+ const storage=db.storage.from('fragrance-photos');
+ const {error:uploadError}=await storage.upload(path,bytes,{contentType:mime,upsert:false});
+ if(uploadError)throw uploadError;
+ const {data:link}=storage.getPublicUrl(path);
+ const {data:updated,error:updateError}=await db.from('fragrances').update({
+  image_url:link.publicUrl,
+  photo_status:'verified',
+  photo_creator:candidate.creator,
+  photo_license:candidate.license_name,
+  photo_license_url:candidate.license_url,
+  photo_source_url:candidate.source_page
+ }).eq('id',candidate.fragrance_id).is('image_url',null).select('id').maybeSingle();
+ if(updateError){
+  const {error:removeError}=await storage.remove([path]);
+  if(removeError)console.error('Could not remove unpublished fragrance photo',removeError);
+  throw updateError;
+ }
+ if(!updated){
+  const {error:removeError}=await storage.remove([path]);
+  if(removeError)throw removeError;
+  return false;
+ }
+ return true;
+}
+
+function eligibleJob(job:PhotoJob,now:number){
+ if(job.fragrances?.image_url||job.attempts>=maximumAttempts)return false;
+ if(job.next_attempt_at&&Date.parse(job.next_attempt_at)>now)return false;
+ if(job.status==='processing')
+  return Boolean(job.last_checked&&Date.parse(job.last_checked)<now-staleJobMs);
+ if(job.status==='no_match')
+  return !job.last_checked||Date.parse(job.last_checked)<now-jobRetryMs;
+ return job.status==='pending';
 }
 
 async function processJobs(){
  const db=serverDb();
- const cutoff=new Date(Date.now()-24*60*60*1000).toISOString();
- const {data:jobs,error}=await db.from('photo_jobs')
-  .select('id,fragrance_id,attempts,status,fragrances(brand,name,concentration)')
-  .in('status',['pending','no_match','processing'])
-  .lt('attempts',100)
-  .or(`last_checked.is.null,last_checked.lt.${new Date(Date.now()-60000).toISOString()}`)
-  .order('last_checked',{ascending:true,nullsFirst:true})
-  .limit(12)
-  .returns<PhotoJob[]>();
- if(error)throw error;
- let checked=0,candidates=0,failures=0,basenotesPages=0;
+ const now=Date.now();
+ const dueRetry=new Date(now-jobRetryMs).toISOString();
+ const staleBefore=new Date(now-staleJobMs).toISOString();
+ const [pendingResult,retryResult,staleResult]=await Promise.all([
+  db.from('photo_jobs').select(jobSelect).eq('status','pending')
+    .lt('attempts',maximumAttempts).or(`next_attempt_at.is.null,next_attempt_at.lte.${new Date(now).toISOString()}`)
+    .order('created_at',{ascending:true})
+   .limit(batchSize).returns<PhotoJob[]>(),
+   db.from('photo_jobs').select(jobSelect).eq('status','no_match')
+    .lt('attempts',maximumAttempts).or(`last_checked.is.null,last_checked.lt.${dueRetry}`)
+   .order('last_checked',{ascending:true,nullsFirst:true})
+   .limit(batchSize).returns<PhotoJob[]>(),
+  db.from('photo_jobs').select(jobSelect).eq('status','processing')
+   .lt('attempts',maximumAttempts).lt('last_checked',staleBefore)
+   .order('last_checked',{ascending:true}).limit(batchSize).returns<PhotoJob[]>()
+ ]);
+ const queueError=pendingResult.error||retryResult.error||staleResult.error;
+ if(queueError)throw queueError;
+ const queued=[...(pendingResult.data||[]),...(retryResult.data||[]),...(staleResult.data||[])];
+ const jobs=queued.filter(job=>eligibleJob(job,now)).slice(0,batchSize);
+ const stats={checked:0,found:0,autoPublished:0,needsReview:0,errors:0};
 
- for(const job of jobs||[]){
-  const claimQuery=db.from('photo_jobs')
-   .update({status:'processing',attempts:job.attempts+1,last_checked:new Date().toISOString()})
-   .eq('id',job.id).eq('status',job.status);
-  const {data:claim,error:claimError}=job.status==='processing'
-   ?await claimQuery.lt('last_checked',cutoff).select('id').maybeSingle()
-   :await claimQuery.select('id').maybeSingle();
+ for(const job of jobs){
+  const claimTime=new Date().toISOString();
+  let claimQuery=db.from('photo_jobs').update({
+   status:'processing',
+   attempts:job.attempts+1,
+   last_checked:claimTime,
+   next_attempt_at:null
+  }).eq('id',job.id).eq('status',job.status).lt('attempts',maximumAttempts);
+  if(job.status==='processing')
+   claimQuery=claimQuery.lt('last_checked',new Date(now-staleJobMs).toISOString());
+  const {data:claim,error:claimError}=await claimQuery.select('id').maybeSingle();
   if(claimError)throw claimError;
   if(!claim)continue;
-  checked++;
+  stats.checked++;
+  let jobHadError=false;
+  let deferredUntil:Date|null=null;
   try{
    const fragrance=job.fragrances;
    if(!fragrance)throw Error(`Fragrance ${job.fragrance_id} is unavailable`);
-   const links=await searchBasenotes(fragrance.brand,fragrance.name).catch(()=>[]);
-   basenotesPages+=links.length;
-   const api=new URL('https://commons.wikimedia.org/w/api.php');
-   api.searchParams.set('action','query');
-   api.searchParams.set('generator','search');
-   api.searchParams.set('gsrsearch',`filetype:bitmap ${fragrance.brand} ${fragrance.name}`);
-   api.searchParams.set('gsrnamespace','6');
-   api.searchParams.set('gsrlimit','100');
-   api.searchParams.set('prop','imageinfo');
-   api.searchParams.set('iiprop','url|extmetadata');
-   api.searchParams.set('iiurlwidth','480');
-   api.searchParams.set('format','json');
-   api.searchParams.set('formatversion','2');
-   const response=await fetch(api,{signal:AbortSignal.timeout(12000),headers:{'User-Agent':'Scentverse/14.0 (licensed fragrance photo discovery; admin review required)'}});
-   if(!response.ok)throw Error(`Wikimedia Commons returned ${response.status}`);
-   const result=await response.json() as {query?:{pages?:CommonsPage[]}};
-   const rows=(result.query?.pages||[]).flatMap(page=>{
-    const info=page.imageinfo?.[0];
-    const metadata=info?.extmetadata;
-    const title=page.title||'';
-    const license=cleanMetadata(metadata?.LicenseShortName?.value);
-    const imageUrl=safeHttpsUrl(info?.url,'upload.wikimedia.org');
-    const sourcePage=safeHttpsUrl(info?.descriptionurl,'commons.wikimedia.org');
-    if(!imageUrl||!sourcePage||!metadata||!isExactTitleMatch(fragrance,title)||!allowedLicense.test(license))return [];
-    return [{
-     fragrance_id:job.fragrance_id,
-     source_page:sourcePage,
-     candidate_url:imageUrl,
-     license_name:license,
-     license_url:safeHttpsUrl(cleanMetadata(metadata.LicenseUrl?.value),'creativecommons.org')||safeHttpsUrl(cleanMetadata(metadata.LicenseUrl?.value),'www.creativecommons.org'),
-     creator:cleanMetadata(metadata.Artist?.value),
-     matched_title:title,
-     thumbnail_url:safeHttpsUrl(info.thumburl,'upload.wikimedia.org'),
-     match_status:'needs_review'
-    }];
-   });
-   // Automatically publish only explicitly identified, licensed matches.
-   // Ambiguous matches remain available for human review.
-   const target=concentrationType(fragrance.concentration);
-   const confident=rows.filter(row=>
-    Boolean(target&&concentrationType(row.matched_title)===target)
-   );
-
-   if(confident.length===1){
-    const match=confident[0];
-    try{
-     const response=await fetch(match.candidate_url,{
-      signal:AbortSignal.timeout(12000)
-     });
-     if(!response.ok)throw Error('Image download failed');
-     const mime=(response.headers.get('content-type')||'')
-      .split(';')[0].trim().toLowerCase();
-     if(!['image/jpeg','image/png','image/webp'].includes(mime))
-      throw Error('Unsupported image');
-     const bytes=Buffer.from(await response.arrayBuffer());
-     if(bytes.length<100||bytes.length>8000000)
-      throw Error('Invalid image size');
-     const valid=mime==='image/jpeg'
-      ?bytes[0]===255&&bytes[1]===216&&bytes[2]===255
-      :mime==='image/png'
-      ?bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))
-      :bytes.toString('ascii',0,4)==='RIFF'
-       &&bytes.toString('ascii',8,12)==='WEBP';
-     if(!valid)throw Error('Invalid image');
-     const ext=mime==='image/jpeg'?'jpg':
-      mime==='image/png'?'png':'webp';
-     const path=`fragrance-${job.fragrance_id}-auto.${ext}`;
-     const {error:uploadError}=await db.storage
-      .from('fragrance-photos')
-      .upload(path,bytes,{contentType:mime,upsert:true});
-     if(uploadError)throw uploadError;
-     const {data:link}=db.storage
-      .from('fragrance-photos').getPublicUrl(path);
-     const {error:photoError}=await db.from('fragrances')
-      .update({
-       image_url:link.publicUrl,
-       photo_status:'verified',
-       photo_creator:match.creator,
-       photo_license:match.license_name,
-       photo_license_url:match.license_url,
-       photo_source_url:match.source_page
-      }).eq('id',job.fragrance_id);
-     if(photoError)throw photoError;
-     const {error:doneError}=await db.from('photo_jobs')
-      .update({status:'done'})
-      .eq('id',job.id);
-     if(doneError)throw doneError;
-     candidates++;
-     continue;
-    }catch(e){
-     console.error('Automatic photo skipped',e);
+   if(fragrance.image_url){
+    const {error}=await db.from('photo_jobs').update({status:'done'}).eq('id',job.id);
+    if(error)throw error;
+    continue;
+   }
+   const discovered:DiscoveredCandidate[]=[];
+   try{
+    const commons=await discoverCommons(fragrance);
+    discovered.push(...commonsCandidates(fragrance,job.fragrance_id,commons.pages,commons.completeSearch));
+   }catch(error){
+    if(error instanceof WikimediaDeferredError){
+     deferredUntil=error.retryAt;
+    }else{
+     jobHadError=true;
+     console.error(`Wikimedia search failed for photo job ${job.id}`,error);
     }
    }
 
-   if(rows.length){
-    const {error:saveError}=await db.from('photo_candidates').upsert(rows,{onConflict:'fragrance_id,source_page',ignoreDuplicates:true});
+   const unique=new Map<string,DiscoveredCandidate>();
+   for(const row of discovered){
+    if(!unique.has(row.candidate.source_page))unique.set(row.candidate.source_page,row);
+   }
+   const results=[...unique.values()];
+   stats.found+=results.length;
+   if(results.length){
+    const {error:saveError}=await db.from('photo_candidates')
+     .upsert(results.map(row=>row.candidate),{onConflict:'fragrance_id,source_page',ignoreDuplicates:true});
     if(saveError)throw saveError;
    }
-   const {data:pending,error:pendingError}=await db.from('photo_candidates')
-    .select('id').eq('fragrance_id',job.fragrance_id).eq('match_status','needs_review').limit(1);
-   if(pendingError)throw pendingError;
-   if(pending?.length)candidates+=rows.length;
-   const {error:updateError}=await db.from('photo_jobs')
-    .update({status:pending?.length?'review':'no_match',last_checked:new Date().toISOString()})
-    .eq('id',job.id).eq('status','processing');
+
+   let autoPublished=false;
+   if(results.length===1&&results[0].autoEligible){
+    const match=results[0].candidate;
+     const {count:pendingCandidates,error:pendingCandidatesError}=await db.from('photo_candidates')
+      .select('id',{count:'exact',head:true})
+      .eq('fragrance_id',job.fragrance_id).eq('match_status','needs_review');
+     if(pendingCandidatesError)throw pendingCandidatesError;
+     const {data:stored,error:storedError}=await db.from('photo_candidates')
+      .select('*').eq('fragrance_id',job.fragrance_id)
+      .eq('source_page',match.source_page).maybeSingle<Candidate&{id:number}>();
+     if(storedError)throw storedError;
+     if(pendingCandidates===1&&stored?.match_status==='needs_review'&&
+      stored.candidate_url===match.candidate_url&&
+      stored.license_name===match.license_name&&
+      stored.license_url===match.license_url&&
+      stored.creator===match.creator&&
+      stored.rights_basis===match.rights_basis){
+      try{
+       const published=await publishCandidate(db,stored,stored.id);
+       if(published){
+        const {data:approved,error:approvalError}=await db.from('photo_candidates')
+         .update({match_status:'approved'}).eq('id',stored.id)
+         .eq('match_status','needs_review').select('id').maybeSingle();
+        if(approvalError)throw approvalError;
+        if(!approved)throw Error('Photo candidate could not be marked approved after publication');
+        autoPublished=true;
+        stats.autoPublished++;
+       }
+      }catch(error){
+       jobHadError=true;
+      console.error(`Automatic publication failed for photo job ${job.id}`,error);
+     }
+    }
+   }
+
+   let reviewCount=0;
+   if(results.length){
+    const {count,error:reviewError}=await db.from('photo_candidates')
+     .select('id',{count:'exact',head:true})
+     .eq('fragrance_id',job.fragrance_id).eq('match_status','needs_review')
+     .in('source_page',results.map(result=>result.candidate.source_page));
+    if(reviewError)throw reviewError;
+    reviewCount=count||0;
+   }
+   stats.needsReview+=reviewCount;
+   const status=autoPublished?'done':reviewCount?'review':deferredUntil?'pending':'no_match';
+   const {error:updateError}=await db.from('photo_jobs').update({
+    status,
+    last_checked:new Date().toISOString(),
+    next_attempt_at:deferredUntil?.toISOString()||null
+   }).eq('id',job.id).eq('status','processing');
    if(updateError)throw updateError;
+   if(jobHadError)stats.errors++;
+   if(autoPublished)continue;
   }catch(error){
-   failures++;
+   stats.errors++;
    console.error(`Photo discovery failed for job ${job.id}`,error);
-   const {error:updateError}=await db.from('photo_jobs')
-    .update({status:'no_match',last_checked:new Date().toISOString()})
-    .eq('id',job.id).eq('status','processing');
+   const {error:updateError}=await db.from('photo_jobs').update({
+    status:'no_match',
+    last_checked:new Date().toISOString(),
+    next_attempt_at:null
+   }).eq('id',job.id).eq('status','processing');
    if(updateError)throw updateError;
   }
  }
- return {checked,candidates,failures,basenotesPages,publication:'None; all matches require admin approval'};
+
+ const {error:runError}=await db.from('photo_runs').insert({
+  checked:stats.checked,
+  found:stats.found,
+  auto_published:stats.autoPublished,
+  needs_review:stats.needsReview,
+  errors:stats.errors
+ });
+ if(runError)throw runError;
+ return stats;
 }
 
 async function handle(req:Request){
  const cronSecret=process.env.CRON_SECRET;
  const cronAuthorized=Boolean(cronSecret&&req.headers.get('authorization')===`Bearer ${cronSecret}`);
- if(!sameOrigin(req)||(!authorized(req)&&!cronAuthorized))return NextResponse.json({error:'Unauthorized'},{status:401});
+ if(!sameOrigin(req)||(!authorized(req)&&!cronAuthorized))
+  return NextResponse.json({error:'Unauthorized'},{status:401});
  try{return NextResponse.json(await processJobs())}
- catch(error){console.error('Scheduled photo discovery failed',error);return NextResponse.json({error:'Photo discovery failed'},{status:502})}
+ catch(error){
+  console.error('Scheduled photo discovery failed',error);
+  return NextResponse.json({error:'Photo discovery failed'},{status:502});
+ }
 }
 
 export const GET=handle;

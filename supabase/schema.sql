@@ -16,19 +16,22 @@ create table if not exists public.photo_jobs (
  id bigint generated always as identity primary key,
  fragrance_id bigint not null unique references public.fragrances(id) on delete cascade,
  status text not null default 'pending',
- last_checked timestamptz, attempts int not null default 0,
+ last_checked timestamptz, next_attempt_at timestamptz, attempts int not null default 0,
  created_at timestamptz not null default now()
 );
 alter table public.photo_jobs add column if not exists last_checked timestamptz;
+alter table public.photo_jobs add column if not exists next_attempt_at timestamptz;
 alter table public.photo_jobs add column if not exists attempts int not null default 0;
 alter table public.photo_jobs drop constraint if exists photo_jobs_status_check;
 alter table public.photo_jobs add constraint photo_jobs_status_check
  check(status in ('pending','processing','review','done','no_match'));
+create index if not exists photo_jobs_queue_idx on public.photo_jobs(status,next_attempt_at,last_checked);
 create table if not exists public.photo_candidates (
  id bigint generated always as identity primary key,
  fragrance_id bigint not null references public.fragrances(id) on delete cascade,
  source_page text not null, candidate_url text not null,
  license_name text, license_url text, creator text,
+ rights_basis text,
  matched_title text not null default '', thumbnail_url text,
  match_status text not null default 'needs_review' check(match_status in ('needs_review','approved','rejected')),
  created_at timestamptz not null default now(),
@@ -36,9 +39,20 @@ create table if not exists public.photo_candidates (
 );
 alter table public.photo_candidates add column if not exists matched_title text not null default '';
 alter table public.photo_candidates add column if not exists thumbnail_url text;
+alter table public.photo_candidates add column if not exists rights_basis text;
 alter table public.fragrances enable row level security;
 alter table public.photo_jobs enable row level security;
 alter table public.photo_candidates enable row level security;
+create table if not exists public.photo_runs (
+ id bigint generated always as identity primary key,
+ checked int not null default 0,
+ found int not null default 0,
+ auto_published int not null default 0,
+ needs_review int not null default 0,
+ errors int not null default 0,
+ completed_at timestamptz not null default now()
+);
+alter table public.photo_runs enable row level security;
 -- Public can only read fragrance records; jobs and candidate review remain private.
 drop policy if exists "Public fragrance read" on public.fragrances;
 create policy "Public fragrance read" on public.fragrances for select using(true);
