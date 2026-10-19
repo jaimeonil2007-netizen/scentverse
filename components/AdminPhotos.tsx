@@ -70,9 +70,9 @@ export default function AdminPhotos(){
   setBusy(true);setMessage('');
   try{
    const response=await fetch('/api/admin/photos/process',{method:'POST'});
-   const result=await response.json() as {checked?:number;candidates?:number;failures?:number;error?:string};
+   const result=await response.json() as {checked?:number;candidates?:number;basenotesPages?:number;failures?:number;error?:string};
    if(!response.ok)throw Error(result.error||'Photo discovery failed');
-   setMessage(`Processed ${result.checked||0} jobs; found ${result.candidates||0} exact-title candidates; ${result.failures||0} errors.`);
+   setMessage(`Processed ${result.checked||0} jobs; found ${result.candidates||0} exact-title candidates; Basenotes pages: ${result.basenotesPages||0}; ${result.failures||0} errors.`);
    await loadCandidates();
   }catch(error){setMessage(error instanceof Error?error.message:'Photo discovery failed')}
   finally{setBusy(false)}
