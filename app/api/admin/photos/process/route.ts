@@ -61,7 +61,7 @@ async function processJobs(){
   .limit(12)
   .returns<PhotoJob[]>();
  if(error)throw error;
- let checked=0,candidates=0,failures=0;
+ let checked=0,candidates=0,failures=0,basenotesPages=0;
 
  for(const job of jobs||[]){
   const claimQuery=db.from('photo_jobs')
@@ -77,7 +77,7 @@ async function processJobs(){
    const fragrance=job.fragrances;
    if(!fragrance)throw Error(`Fragrance ${job.fragrance_id} is unavailable`);
    const links=await searchBasenotes(fragrance.brand,fragrance.name).catch(()=>[]);
-   console.log('Basenotes pages found:',links.length);
+   basenotesPages+=links.length;
    const api=new URL('https://commons.wikimedia.org/w/api.php');
    api.searchParams.set('action','query');
    api.searchParams.set('generator','search');
@@ -191,7 +191,7 @@ async function processJobs(){
    if(updateError)throw updateError;
   }
  }
- return {checked,candidates,failures,publication:'None; all matches require admin approval'};
+ return {checked,candidates,failures,basenotesPages,publication:'None; all matches require admin approval'};
 }
 
 async function handle(req:Request){
