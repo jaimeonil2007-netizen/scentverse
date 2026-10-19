@@ -57,7 +57,7 @@ async function processJobs(){
   .lt('attempts',4)
   .or(`last_checked.is.null,last_checked.lt.${cutoff}`)
   .order('last_checked',{ascending:true,nullsFirst:true})
-  .limit(3)
+  .limit(8)
   .returns<PhotoJob[]>();
  if(error)throw error;
  let checked=0,candidates=0,failures=0;
@@ -80,7 +80,7 @@ async function processJobs(){
    api.searchParams.set('generator','search');
    api.searchParams.set('gsrsearch',`filetype:bitmap ${fragrance.brand} ${fragrance.name}`);
    api.searchParams.set('gsrnamespace','6');
-   api.searchParams.set('gsrlimit','20');
+   api.searchParams.set('gsrlimit','50');
    api.searchParams.set('prop','imageinfo');
    api.searchParams.set('iiprop','url|extmetadata');
    api.searchParams.set('iiurlwidth','480');
@@ -109,6 +109,64 @@ async function processJobs(){
      match_status:'needs_review'
     }];
    });
+   // Automatically publish only explicitly identified, licensed matches.
+   // Ambiguous matches remain available for human review.
+   const target=concentrationType(fragrance.concentration);
+   const confident=rows.filter(row=>
+    Boolean(target&&concentrationType(row.matched_title)===target)
+   );
+
+   if(confident.length===1){
+    const match=confident[0];
+    try{
+     const response=await fetch(match.candidate_url,{
+      signal:AbortSignal.timeout(12000)
+     });
+     if(!response.ok)throw Error('Image download failed');
+     const mime=(response.headers.get('content-type')||'')
+      .split(';')[0].trim().toLowerCase();
+     if(!['image/jpeg','image/png','image/webp'].includes(mime))
+      throw Error('Unsupported image');
+     const bytes=Buffer.from(await response.arrayBuffer());
+     if(bytes.length<100||bytes.length>8000000)
+      throw Error('Invalid image size');
+     const valid=mime==='image/jpeg'
+      ?bytes[0]===255&&bytes[1]===216&&bytes[2]===255
+      :mime==='image/png'
+      ?bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))
+      :bytes.toString('ascii',0,4)==='RIFF'
+       &&bytes.toString('ascii',8,12)==='WEBP';
+     if(!valid)throw Error('Invalid image');
+     const ext=mime==='image/jpeg'?'jpg':
+      mime==='image/png'?'png':'webp';
+     const path=`fragrance-${job.fragrance_id}-auto.${ext}`;
+     const {error:uploadError}=await db.storage
+      .from('fragrance-photos')
+      .upload(path,bytes,{contentType:mime,upsert:true});
+     if(uploadError)throw uploadError;
+     const {data:link}=db.storage
+      .from('fragrance-photos').getPublicUrl(path);
+     const {error:photoError}=await db.from('fragrances')
+      .update({
+       image_url:link.publicUrl,
+       photo_status:'verified',
+       photo_creator:match.creator,
+       photo_license:match.license_name,
+       photo_license_url:match.license_url,
+       photo_source_url:match.source_page
+      }).eq('id',job.fragrance_id);
+     if(photoError)throw photoError;
+     const {error:doneError}=await db.from('photo_jobs')
+      .update({status:'done'})
+      .eq('id',job.id);
+     if(doneError)throw doneError;
+     candidates++;
+     continue;
+    }catch(e){
+     console.error('Automatic photo skipped',e);
+    }
+   }
+
    if(rows.length){
     const {error:saveError}=await db.from('photo_candidates').upsert(rows,{onConflict:'fragrance_id,source_page',ignoreDuplicates:true});
     if(saveError)throw saveError;
