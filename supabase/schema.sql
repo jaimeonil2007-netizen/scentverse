@@ -4,25 +4,38 @@ create table if not exists public.fragrances (
  brand text not null, name text not null, concentration text not null,
  family text not null default 'Other', notes text[] not null default '{}',
  image_url text, photo_status text not null default 'missing' check(photo_status in ('missing','review','verified')),
+ photo_creator text, photo_license text, photo_license_url text, photo_source_url text,
  created_at timestamptz not null default now(),
  unique(brand,name,concentration)
 );
+alter table public.fragrances add column if not exists photo_creator text;
+alter table public.fragrances add column if not exists photo_license text;
+alter table public.fragrances add column if not exists photo_license_url text;
+alter table public.fragrances add column if not exists photo_source_url text;
 create table if not exists public.photo_jobs (
  id bigint generated always as identity primary key,
  fragrance_id bigint not null unique references public.fragrances(id) on delete cascade,
- status text not null default 'pending' check(status in ('pending','review','done','no_match')),
+ status text not null default 'pending',
  last_checked timestamptz, attempts int not null default 0,
  created_at timestamptz not null default now()
 );
+alter table public.photo_jobs add column if not exists last_checked timestamptz;
+alter table public.photo_jobs add column if not exists attempts int not null default 0;
+alter table public.photo_jobs drop constraint if exists photo_jobs_status_check;
+alter table public.photo_jobs add constraint photo_jobs_status_check
+ check(status in ('pending','processing','review','done','no_match'));
 create table if not exists public.photo_candidates (
  id bigint generated always as identity primary key,
  fragrance_id bigint not null references public.fragrances(id) on delete cascade,
  source_page text not null, candidate_url text not null,
  license_name text, license_url text, creator text,
+ matched_title text not null default '', thumbnail_url text,
  match_status text not null default 'needs_review' check(match_status in ('needs_review','approved','rejected')),
  created_at timestamptz not null default now(),
  unique(fragrance_id,source_page)
 );
+alter table public.photo_candidates add column if not exists matched_title text not null default '';
+alter table public.photo_candidates add column if not exists thumbnail_url text;
 alter table public.fragrances enable row level security;
 alter table public.photo_jobs enable row level security;
 alter table public.photo_candidates enable row level security;
@@ -30,3 +43,27 @@ alter table public.photo_candidates enable row level security;
 drop policy if exists "Public fragrance read" on public.fragrances;
 create policy "Public fragrance read" on public.fragrances for select using(true);
 -- Supabase Storage: create a public bucket called fragrance-photos for approved images only.
+
+create or replace function public.enqueue_fragrance_photo()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+ insert into public.photo_jobs(fragrance_id,status)
+ values(new.id,'pending')
+ on conflict(fragrance_id) do nothing;
+ return new;
+end;
+$$;
+
+drop trigger if exists fragrance_photo_enqueue on public.fragrances;
+create trigger fragrance_photo_enqueue
+ after insert on public.fragrances
+ for each row execute function public.enqueue_fragrance_photo();
+
+insert into public.photo_jobs(fragrance_id,status)
+select id,'pending' from public.fragrances
+where image_url is null and photo_status='missing'
+on conflict(fragrance_id) do nothing;
