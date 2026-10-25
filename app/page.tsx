@@ -1,5 +1,6 @@
-import Catalog from '../components/Catalog';
-import seed from '../lib/catalog.json';
-import {configured,serverDb} from '../lib/db';
-export const dynamic='force-dynamic';
-export default async function Home(){let items:any[]=seed;let live=false;if(configured()){try{const {data,error}=await serverDb().from('fragrances').select('id,brand,name,family,notes,concentration,image_url,photo_status,photo_creator,photo_license,photo_license_url,photo_source_url').order('name').limit(1000);if(error)throw error;if(data&&data.length){items=data.map(x=>({...x,image:x.image_url||null}));live=true}}catch(e){console.error('Database unavailable',e)}}return <><header><div className="wrap nav"><span className="logo">SCENTVERSE</span><div className="nav-links"><a href="/admin/photos">Photo admin</a><a href="/legacy-v13.html">Original v13 ↗</a></div></div></header><div className="hero"><div className="wrap"><span className="brand">THE ART OF FRAGRANCE</span><h1>Discover your<br/><em>signature scent.</em></h1><p>Explore fragrance notes, discover new favorites, and compare your next signature scent.</p><a className="button" href="#discover">Explore fragrances →</a></div></div><main className="wrap" id="discover"><h2>Explore fragrances</h2><p>{live?'Live fragrance database':'Preview catalog — connect Supabase to enable live updates'}</p><div className="notice">Photos are shown only when included with source evidence or approved by an administrator. New image matches enter a review queue rather than being published blindly. <a href="/legacy-v13.html">Open the original v13 with all its features</a>.</div><Catalog initial={items}/></main><footer>SCENTVERSE v14 · Independent fragrance guide · Not affiliated with fragrance brands</footer></>}
+
+import { redirect } from 'next/navigation';
+
+export default function Home() {
+  redirect('/index.html');
+}
