@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Vantiq Digital builds premium websites and practical AI automation systems for growing businesses."
+    />
+    <meta
+      name="keywords"
+      content="website design agency, AI automation, business websites, Vantiq Digital, premium web design"
+    />
+    <meta name="theme-color" content="#101014" />
+    <meta property="og:title" content="Vantiq Digital | Premium Websites. Smarter Operations." />
+    <meta
+      property="og:description"
+      content="Modern websites and AI-powered systems for businesses that want a stronger online presence."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Vantiq Digital | Premium Websites. Smarter Operations.</title>
+    <style>
+      :root {
+        --bg: #0d0d11;
+        --bg-soft: #141419;
+        --panel: rgba(22, 22, 29, 0.84);
+        --panel-strong: #191a20;
+        --line: rgba(255, 255, 255, 0.09);
+        --line-strong: rgba(214, 179, 106, 0.38);
+        --gold: #d6b36a;
+        --gold-soft: #f1d597;
+        --text: #f5f0e7;
+        --muted: #b7b3bc;
+        --muted-2: #8d8a95;
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+        --radius: 22px;
+        --max: 1180px;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top right, rgba(214, 179, 106, 0.12), transparent 20%),
+          radial-gradient(circle at top left, rgba(101, 94, 95, 0.14), transparent 18%),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+        line-height: 1.6;
+      }
+
+      img { max-width: 100%; display: block; }
+      a { color: inherit; text-decoration: none; }
+      button, input, select, textarea { font: inherit; }
+      p { margin: 0; color: var(--muted); }
+      ul { list-style: none; margin: 0; padding-left: 0; }
+
+      .wrap {
+        width: min(var(--max), calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        background: rgba(13, 13, 17, 0.7);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav {
+        min-height: 78px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand {
+        font-size: 1.65rem;
+        font-weight: 900;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .brand span { color: var(--gold); }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .nav-links a {
+        position: relative;
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 0;
+        height: 1px;
+        background: var(--gold);
+        transition: width 0.2s ease;
+      }
+
+      .nav-links a:hover { color: var(--text); }
+      .nav-links a:hover::after { width: 100%; }
+
+      .nav-cta,
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0.9rem 1.45rem;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .nav-cta:hover,
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .nav-cta {
+        background: linear-gradient(135deg, var(--gold), #f0d699);
+        color: #17151a;
+        box-shadow: 0 14px 28px rgba(214, 179, 106, 0.15);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--gold), #f0d699);
+        color: #17151a;
+        box-shadow: 0 14px 30px rgba(214, 179, 106, 0.14);
+      }
+
+      .btn-secondary {
+        background: rgba(255,255,255,0.02);
+        border-color: rgba(255,255,255,0.14);
+        color: var(--text);
+      }
+
+      .nav-toggle {
+        display: none;
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .section {
+        padding: 108px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        display: inline-block;
+        font-size: 0.74rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: var(--gold);
+      }
+
+      h1, h2, h3, h4 {
+        margin: 0 0 1rem;
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+        color: var(--text);
+      }
+
+      h1 {
+        font-size: clamp(3.2rem, 7vw, 6rem);
+        max-width: 700px;
+        margin-top: 1.1rem;
+      }
+
+      h2 {
+        font-size: clamp(2.5rem, 4vw, 4rem);
+      }
+
+      h3 {
+        font-size: 1.85rem;
+      }
+
+      .lead {
+        font-size: clamp(1.08rem, 2vw, 1.35rem);
+        color: var(--muted);
+        max-width: 700px;
+      }
+
+      .hero {
+        overflow: hidden;
+        padding: 88px 0 82px;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        right: 8%;
+        top: 4%;
+        width: 32rem;
+        height: 32rem;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(214, 179, 106, 0.18), transparent 58%);
+        filter: blur(42px);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 34px;
+        align-items: center;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 2.2rem;
+      }
+
+      .trust-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-top: 2rem;
+        color: var(--muted-2);
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .trust-bar li {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+      }
+
+      .trust-bar li::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+
+      .hero-card {
+        position: relative;
+        background: linear-gradient(180deg, rgba(25,25,31,0.95), rgba(15,15,20,0.95));
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        padding: 22px;
+        overflow: hidden;
+      }
+
+      .hero-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto auto 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gold), transparent 75%);
+      }
+
+      .mini-window {
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.02);
+        border-radius: 18px;
+        padding: 18px;
+      }
+
+      .mini-topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+
+      .dots {
+        display: flex;
+        gap: 8px;
+      }
+
+      .dots span {
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.12);
+      }
+
+      .dots span:nth-child(1) { background: #ff6b6b; }
+      .dots span:nth-child(2) { background: #ffd166; }
+      .dots span:nth-child(3) { background: #7ae582; }
+
+      .mini-label {
+        color: var(--muted-2);
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .mockup-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .mock-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .bar {
+        position: relative;
+        height: 12px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(255,255,255,0.07);
+      }
+
+      .bar::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        width: 72%;
+        background: linear-gradient(90deg, rgba(214,179,106,0.12), rgba(214,179,106,0.7), rgba(214,179,106,0.1));
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.42rem 0.8rem;
+        border-radius: 999px;
+        border: 1px solid rgba(214,179,106,0.28);
+        background: rgba(214,179,106,0.08);
+        color: var(--gold-soft);
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .stat-stack {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .stat-box {
+        padding: 16px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--line);
+      }
+
+      .stat-box strong {
+        display: block;
+        font-size: 1.9rem;
+        margin-bottom: 6px;
+        color: var(--text);
+      }
+
+      .stat-box span {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .section-header {
+        max-width: 760px;
+        margin-bottom: 2.2rem;
+      }
+
+      .services-grid,
+      .process-grid,
+      .portfolio-grid,
+      .pricing-grid {
+        display: grid;
+        gap: 22px;
+      }
+
+      .services-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .process-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .portfolio-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .pricing-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+
+      .card {
+        position: relative;
+        background: linear-gradient(180deg, rgba(26,26,33,0.96), rgba(15,15,18,0.96));
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 28px 24px;
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.3);
+        border-color: var(--line-strong);
+      }
+
+      .card-index {
+        margin-bottom: 1.1rem;
+        color: var(--gold);
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+
+      .card p,
+      .portfolio-card p,
+      .pricing-card p {
+        font-size: 0.98rem;
+      }
+
+      .card ul,
+      .pricing-card ul {
+        display: grid;
+        gap: 10px;
+        margin-top: 1.15rem;
+      }
+
+      .card li,
+      .pricing-card li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        color: var(--muted);
+      }
+
+      .card li::before,
+      .pricing-card li::before {
+        content: "✓";
+        color: var(--gold);
+        font-weight: 900;
+      }
+
+      .feature-visual {
+        height: 170px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(214,179,106,0.13), rgba(255,255,255,0.02));
+        border: 1px solid var(--line);
+        padding: 18px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: end;
+      }
+
+      .feature-visual::before {
+        content: "";
+        position: absolute;
+        width: 70%;
+        height: 120%;
+        right: -12%;
+        top: -10%;
+        border-radius: 30% 50% 55% 65%;
+        background: rgba(214,179,106,0.12);
+        transform: rotate(16deg);
+      }
+
+      .feature-visual .chip {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 0.78rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--text);
+        background: rgba(13,13,17,0.7);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .panel {
+        background: linear-gradient(180deg, rgba(19,19,25,0.96), rgba(12,12,17,0.96));
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        padding: 32px;
+      }
+
+      .panel h3 {
+        margin-bottom: 0.55rem;
+      }
+
+      .panel-list {
+        display: grid;
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      .panel-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+      }
+
+      .panel-item:first-child {
+        border-top: none;
+        padding-top: 0;
+      }
+
+      .panel-item .icon,
+      .contact-list .icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        color: var(--gold);
+        font-weight: 900;
+        background: rgba(214,179,106,0.1);
+        border: 1px solid rgba(214,179,106,0.18);
+      }
+
+      .portfolio-preview {
+        height: 230px;
+        border-radius: 18px;
+        margin-bottom: 18px;
+        border: 1px solid var(--line);
+        background:
+          linear-gradient(135deg, rgba(214,179,106,0.13), rgba(255,255,255,0.02)),
+          linear-gradient(120deg, rgba(20,20,25,0.9), rgba(12,12,18,0.95));
+        position: relative;
+        overflow: hidden;
+      }
+
+      .portfolio-preview::before,
+      .portfolio-preview::after {
+        content: "";
+        position: absolute;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .portfolio-preview::before {
+        width: 54%;
+        height: 42%;
+        left: 12%;
+        top: 18%;
+      }
+
+      .portfolio-preview::after {
+        width: 68%;
+        height: 20%;
+        left: 18%;
+        bottom: 16%;
+      }
+
+      .portfolio-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 0.9rem;
+        color: var(--muted);
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .pricing-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .pricing-card.featured {
+        border-color: rgba(214,179,106,0.38);
+        background: linear-gradient(180deg, rgba(35,29,20,0.96), rgba(17,17,20,0.96));
+      }
+
+      .pricing-card .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+
+      .mini-badge {
+        display: inline-flex;
+        padding: 0.42rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(214,179,106,0.08);
+        border: 1px solid rgba(214,179,106,0.18);
+        color: var(--gold);
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .price-wrap {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .currency {
+        color: var(--gold);
+        font-size: 1.2rem;
+      }
+
+      .price-tag {
+        color: var(--gold);
+        font-size: 2.5rem;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: -0.06em;
+      }
+
+      .term {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .pricing-card li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .pricing-card li::before {
+        content: "•";
+        color: var(--gold);
+        font-size: 1.5rem;
+        line-height: 1;
+      }
+
+      .pricing-card .btn {
+        margin-top: auto;
+        width: 100%;
+      }
+
+      .cta-band {
+        padding: 14px 0 88px;
+      }
+
+      .cta-box {
+        background:
+          linear-gradient(135deg, rgba(214,179,106,0.12), rgba(214,179,106,0.02)),
+          rgba(22,22,29,0.96);
+        border: 1px solid rgba(214,179,106,0.22);
+        border-radius: 28px;
+        padding: clamp(28px, 5vw, 54px);
+        text-align: center;
+      }
+
+      .cta-box h2 {
+        max-width: 740px;
+        margin: 0 auto 12px;
+      }
+
+      .cta-box p {
+        max-width: 620px;
+        margin: 0 auto 22px;
+        font-size: 1.06rem;
+      }
+
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 28px;
+        align-items: start;
+      }
+
+      .contact-form,
+      .contact-panel {
+        background: linear-gradient(180deg, rgba(22,22,29,0.96), rgba(14,14,18,0.96));
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        padding: 28px;
+      }
+
+      .field-group {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 0.74rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      input, select, textarea {
+        width: 100%;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.02);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 0.95rem 1rem;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      input:focus, select:focus, textarea:focus {
+        border-color: rgba(214,179,106,0.5);
+        box-shadow: 0 0 0 4px rgba(214,179,106,0.08);
+      }
+
+      textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      .form-status {
+        min-height: 24px;
+        margin-top: 14px;
+        color: var(--gold-soft);
+        font-size: 0.92rem;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .form-status.show {
+        opacity: 1;
+      }
+
+      .contact-list {
+        display: grid;
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .contact-list li {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+      }
+
+      .contact-list li:first-child {
+        border-top: none;
+        padding-top: 0;
+      }
+
+      .contact-list strong {
+        display: block;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 24px 0 42px;
+      }
+
+      .footer-wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+
+      [data-reveal].visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 900px) {
+        .hero-grid,
+        .split,
+        .contact-grid,
+        .services-grid,
+        .process-grid,
+        .portfolio-grid,
+        .pricing-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-toggle {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .nav .nav-links {
+          position: absolute;
+          left: 16px;
+          right: 16px;
+          top: calc(100% + 10px);
+          display: none;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 18px;
+          background: rgba(18,18,23,0.98);
+          border: 1px solid var(--line);
+          border-radius: 18px;
+          padding: 18px 16px;
+          box-shadow: var(--shadow);
+        }
+
+        .nav.open .nav-links {
+          display: flex;
+        }
+
+        .nav .nav-cta {
+          display: none;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .section { padding: 84px 0; }
+        .hero { padding-top: 60px; }
+        .actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .btn,
+        .nav-cta {
+          width: 100%;
+        }
+        .brand {
+          letter-spacing: 0.1em;
+          font-size: 1.4rem;
+        }
+        .hero-card,
+        .contact-form,
+        .contact-panel,
+        .card,
+        .panel {
+          padding: 20px;
+        }
+        .footer-wrap {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap nav" id="nav">
+        <a class="brand" href="#top" aria-label="Vantiq Digital home">Vantiq<span>.</span></a>
+
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          ☰
+        </button>
+
+        <nav class="nav-links" aria-label="Main menu">
+          <a href="#services">Services</a>
+          <a href="#process">Process</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <a class="nav-cta" href="#contact">Book a call</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div data-reveal>
+            <span class="eyebrow">Web design • AI automation</span>
+            <h1>Premium websites that turn attention into business.</h1>
+            <p class="lead">
+              Vantiq Digital builds clean, conversion-focused websites and practical AI-powered workflows
+              for businesses that want a stronger online presence and less manual admin.
+            </p>
+
+            <div class="actions">
+              <a class="btn btn-primary" href="#contact">Start your project</a>
+              <a class="btn btn-secondary" href="#services">Explore services</a>
+            </div>
+
+            <ul class="trust-bar" aria-label="Company values">
+              <li>Strategy</li>
+              <li>Design</li>
+              <li>Automation</li>
+            </ul>
+          </div>
+
+          <div class="hero-card" data-reveal>
+            <div class="mini-window">
+              <div class="mini-topbar">
+                <div class="dots" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <span class="mini-label">Launch plan</span>
+              </div>
+
+              <div class="mockup-grid">
+                <div class="mock-row">
+                  <div class="bar" aria-hidden="true"></div>
+                  <span class="tag">Website</span>
+                </div>
+                <div class="mock-row">
+                  <div class="bar" aria-hidden="true" style="width: 88%"></div>
+                  <span class="tag">SEO</span>
+                </div>
+                <div class="mock-row">
+                  <div class="bar" aria-hidden="true" style="width: 66%"></div>
+                  <span class="tag">AI</span>
+                </div>
+              </div>
+
+              <div class="stat-stack">
+                <div class="stat-box">
+                  <strong>2–4</strong>
+                  <span>Weeks to launch</span>
+                </div>
+                <div class="stat-box">
+                  <strong>1</strong>
+                  <span>Clear project owner</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="services">
+        <div class="wrap">
+          <div class="section-header" data-reveal>
+            <span class="eyebrow">What we do</span>
+            <h2>Digital systems built for real business growth.</h2>
+          </div>
+
+          <div class="services-grid">
+            <article class="card" data-reveal>
+              <div class="card-index">01 / Design</div>
+              <h3>Premium websites</h3>
+              <p>Minimal, modern, and conversion-focused websites that feel credible and work beautifully on mobile and desktop.</p>
+              <ul>
+                <li>Custom landing pages and service sites</li>
+                <li>Mobile-first design for cleaner UX</li>
+                <li>Clear messaging and stronger trust signals</li>
+              </ul>
+            </article>
+
+            <article class="card" data-reveal>
+              <div class="card-index">02 / Automation</div>
+              <h3>AI-powered workflow</h3>
+              <p>Practical automation that reduces repetitive admin, improves follow-up, and helps your team move faster.</p>
+              <ul>
+                <li>Lead intake and follow-up systems</li>
+                <li>Contact routing and reminders</li>
+                <li>Booking and response automation</li>
+              </ul>
+            </article>
+
+            <article class="card" data-reveal>
+              <div class="card-index">03 / Support</div>
+              <h3>Launch and care</h3>
+              <p>Ongoing support for updates, content changes, and site improvements after launch.</p>
+              <ul>
+                <li>Routine quality checks</li>
+                <li>Content updates and edits</li>
+                <li>Recommendations for future growth</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="process">
+        <div class="wrap">
+          <div class="section-header" data-reveal>
+            <span class="eyebrow">Simple process</span>
+            <h2>From idea to launch without the guesswork.</h2>
+          </div>
+
+          <div class="process-grid">
+            <article class="card" data-reveal>
+              <div class="card-index">Step 01</div>
+              <h3>Define the brief</h3>
+              <p>We clarify your business goals, offer, and the outcomes your website needs to support.</p>
+            </article>
+
+            <article class="card" data-reveal>
+              <div class="card-index">Step 02</div>
+              <h3>Design the experience</h3>
+              <p>We shape the structure, content flow, and visual direction before creating the final site.</p>
+            </article>
+
+            <article class="card" data-reveal>
+              <div class="card-index">Step 03</div>
+              <h3>Launch and refine</h3>
+              <p>After testing and approval, your new website goes live and stays ready for real leads and customers.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="approach">
+        <div class="wrap split">
+          <div data-reveal>
+            <span class="eyebrow">Why Vantiq</span>
+            <h2>Built for serious businesses, not generic templates.</h2>
+            <p class="lead">
+              We focus on the things that drive real business value: clear positioning, stronger conversion paths,
+              and practical automation that reduces friction behind the scenes.
+            </p>
+          </div>
+
+          <div class="panel" data-reveal>
+            <h3>What you gain</h3>
+            <div class="panel-list">
+              <div class="panel-item">
+                <div class="icon">01</div>
+                <div>
+                  <strong>Better positioning</strong>
+                  <p>A clearer digital presence makes it easier for buyers to understand your offer and trust your expertise.</p>
+                </div>
+              </div>
+
+              <div class="panel-item">
+                <div class="icon">02</div>
+                <div>
+                  <strong>Less manual admin</strong>
+                  <p>Automations can support lead capture, reminders, and customer follow-up so your team saves time.</p>
+                </div>
+              </div>
+
+              <div class="panel-item">
+                <div class="icon">03</div>
+                <div>
+                  <strong>Better decisions</strong>
+                  <p>You get a focused digital system that helps support sales, communication, and growth without extra complexity.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="portfolio">
+        <div class="wrap">
+          <div class="section-header" data-reveal>
+            <span class="eyebrow">Portfolio direction</span>
+            <h2>Examples of the type of work we build.</h2>
+          </div>
+
+          <div class="portfolio-grid">
+            <article class="card" data-reveal>
+              <div class="portfolio-preview" aria-hidden="true"></div>
+              <h3>Brand launch site</h3>
+              <p>Premium single-page marketing site for a service business that wants a cleaner message and stronger credibility.</p>
+              <div class="portfolio-meta">
+                <span>Website</span>
+                <span>Strategy • Design</span>
+              </div>
+            </article>
+
+            <article class="card" data-reveal>
+              <div class="portfolio-preview" aria-hidden="true" style="background: linear-gradient(135deg, rgba(93,112,214,0.12), rgba(255,255,255,0.02)), linear-gradient(120deg, rgba(20,20,25,0.9), rgba(12,12,18,0.95));"></div>
+              <h3>Lead generation funnel</h3>
+              <p>Conversion-focused landing page built around a clear offer, premium messaging, and responsive mobile experience.</p>
+              <div class="portfolio-meta">
+                <span>Funnel</span>
+                <span>Copy • UX</span>
+              </div>
+            </article>
+
+            <article class="card" data-reveal>
+              <div class="portfolio-preview" aria-hidden="true" style="background: linear-gradient(135deg, rgba(214,179,106,0.15), rgba(255,255,255,0.02)), linear-gradient(120deg, rgba(20,20,25,0.9), rgba(12,12,18,0.95));"></div>
+              <h3>Automation system</h3>
+              <p>Lead capture and follow-up workflow solutions designed to improve response time and reduce repetitive manual steps.</p>
+              <div class="portfolio-meta">
+                <span>AI workflow</span>
+                <span>Ops • Automation</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="pricing">
+        <div class="wrap">
+          <div class="section-header" data-reveal>
+            <span class="eyebrow">Starting packages</span>
+            <h2>Transparent pricing for modern business websites.</h2>
+          </div>
+
+          <div class="pricing-grid">
+            <article class="card pricing-card" data-reveal>
+              <div class="top">
+                <h3>Starter</h3>
+                <span class="mini-badge">Entry</span>
+              </div>
+              <div class="price-wrap">
+                <span class="currency">$</span>
+                <span class="price-tag">299</span>
+              </div>
+              <p>Great for a clean, professional online presence with a straightforward conversion path.</p>
+
+              <ul>
+                <li>Single-page website or compact landing page</li>
+                <li>Mobile-friendly responsive layout</li>
+                <li>Contact section and essential business details</li>
+                <li>Basic on-page SEO setup</li>
+              </ul>
+
+              <a class="btn btn-secondary" href="#contact">Get started</a>
+            </article>
+
+            <article class="card pricing-card featured" data-reveal>
+              <div class="top">
+                <h3>Business</h3>
+                <span class="mini-badge">Most popular</span>
+              </div>
+              <div class="price-wrap">
+                <span class="currency">$</span>
+                <span class="price-tag">599</span>
+              </div>
+              <p>For businesses that need a more complete website experience and stronger positioning.</p>
+
+              <ul>
+                <li>Multi-section business website</li>
+                <li>Lead-focused messaging and service structure</li>
+                <li>Booking or contact workflow setup</li>
+                <li>SEO-friendly structure and performance checks</li>
+              </ul>
+
+              <a class="btn btn-primary" href="#contact">Book a consultation</a>
+            </article>
+
+            <article class="card pricing-card" data-reveal>
+              <div class="top">
+                <h3>Automation</h3>
+                <span class="mini-badge">Add-on</span>
+              </div>
+              <div class="price-wrap">
+                <span class="currency">$</span>
+                <span class="price-tag">199</span>
+                <span class="term">/setup</span>
+              </div>
+              <p>Useful for businesses that want practical AI workflow support without a full website rebuild.</p>
+
+              <ul>
+                <li>Lead intake automation</li>
+                <li>Email or CRM routing flows</li>
+                <li>Smart follow-up reminders</li>
+                <li>Simple process optimization support</li>
+              </ul>
+
+              <a class="btn btn-secondary" href="#contact">Explore options</a>
+            </article>
+          </div>
+
+          <div class="section-header" style="margin-top: 28px; margin-bottom: 0;" data-reveal>
+            <p>Final pricing depends on project scope, required pages, and support needs. Hosting, domain setup, and any third-party integrations are quoted separately.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div class="wrap">
+          <div class="cta-box" data-reveal>
+            <span class="eyebrow">Ready to build smarter?</span>
+            <h2>Let’s turn your business into a stronger online presence.</h2>
+            <p>Whether you need a premium website, a clearer sales funnel, or practical AI automation support, we can help define the next best step.</p>
+            <a class="btn btn-primary" href="#contact">Start your project</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="wrap contact-grid">
+          <div class="contact-form" data-reveal>
+            <span class="eyebrow">Contact</span>
+            <h2>Tell us what you need.</h2>
+
+            <form id="leadForm" novalidate>
+              <div class="field-group">
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" placeholder="Your full name" required />
+              </div>
+
+              <div class="field-group">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@example.com" required />
+              </div>
+
+              <div class="field-group">
+                <label for="service">Service</label>
+                <select id="service" name="service" required>
+                  <option value="">Select a service</option>
+                  <option value="Website Design">Website Design</option>
+                  <option value="AI Automation">AI Automation</option>
+                  <option value="Website + Automation">Website + Automation</option>
+                  <option value="Ongoing Support">Ongoing Support</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="message">Project details</label>
+                <textarea id="message" name="message" placeholder="Tell us about your business, goals, and timeline..." required></textarea>
+              </div>
+
+              <button class="btn btn-primary" type="submit">Send inquiry</button>
+              <div class="form-status" id="formStatus" aria-live="polite"></div>
+            </form>
+          </div>
+
+          <aside class="contact-panel" data-reveal>
+            <span class="eyebrow">How we work</span>
+            <h2>Your next step is simple.</h2>
+            <p>We can help with a new business website, a website refresh, or light AI automation support for your current process.</p>
+
+            <ul class="contact-list">
+              <li>
+                <div class="icon">✦</div>
+                <div>
+                  <strong>Fast response</strong>
+                  We keep the process focused, clear, and easy to understand.
+                </div>
+              </li>
+              <li>
+                <div class="icon">✓</div>
+                <div>
+                  <strong>Clear scope</strong>
+                  We define what is included before moving into design or build work.
+                </div>
+              </li>
+              <li>
+                <div class="icon">↗</div>
+                <div>
+                  <strong>Business-first approach</strong>
+                  The goal is to build something valuable that supports growth and conversion.
+                </div>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap footer-wrap">
+        <span>© 2026 Vantiq Digital</span>
+        <div class="footer-links">
+          <a href="#services">Services</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('[data-reveal]').forEach((element) => observer.observe(element));
+
+      const nav = document.getElementById('nav');
+      const navToggle = document.getElementById('navToggle');
+
+      navToggle.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      document.querySelectorAll('.nav-links a').forEach((link) => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      const form = document.getElementById('leadForm');
+      const status = document.getElementById('formStatus');
+      const businessEmail = 'hello@vantiqdigital.com';
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const name = (formData.get('name') || '').toString().trim();
+        const email = (formData.get('email') || '').toString().trim();
+        const service = (formData.get('service') || '').toString().trim();
+        const message = (formData.get('message') || '').toString().trim();
+
+        if (!name || !email || !service || !message) {
+          status.textContent = 'Please complete every field before submitting your inquiry.';
+          status.classList.add('show');
+          return;
+        }
+
+        const subject = encodeURIComponent(`Website inquiry: ${service}`);
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\nService: ${service}\n\nProject details:\n${message}`
+        );
+
+        status.textContent = 'Your email app is opening so you can send the inquiry.';
+        status.classList.add('show');
+
+        window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
+        form.reset();
+      });
+    </script>
+  </body>
+</html>
